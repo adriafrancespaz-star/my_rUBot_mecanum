@@ -1,6 +1,6 @@
 # **ROS2 rUBot setup**
 
-Canvi de Paula!!!
+Canvi de Paula!!! Hola
 
 The objectives of this section are:
 - Setup the robot project in virtual environment for simulation
