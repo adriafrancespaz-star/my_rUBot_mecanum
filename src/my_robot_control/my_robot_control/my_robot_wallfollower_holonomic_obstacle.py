@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Holonomic obstacle wall follower with terminal logging per LiDAR region."""
 
+# We import the needed packages.
 import math
 
 import rclpy
