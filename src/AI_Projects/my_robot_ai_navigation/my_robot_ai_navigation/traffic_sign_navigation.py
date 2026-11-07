@@ -33,11 +33,18 @@ class TrafficSignNavigation(Node):
         self.accept_sign = False
 
         # TODO 1: Create a String subscriber for /traffic_sign.
-        self.sign_subscriber = None
+        self.sign_subscriber = self.create_subscription(
+            String,
+            '/traffic_sign',
+            self.sign_callback,
+            10
+        )
 
     def sign_callback(self, msg):
         # TODO 2: While accept_sign is True, store the sign in lower case.
-        pass
+        if self.accept_sign:
+            self.detected_sign = msg.data.lower()
+            self.get_logger().info(f'Detected sign: {self.detected_sign}')
 
     def create_pose(self, values):
         x, y, yaw = values
@@ -67,6 +74,8 @@ class TrafficSignNavigation(Node):
         self.get_logger().info('Waiting for a traffic sign on /traffic_sign ...')
 
         # TODO 3: Process callbacks until detected_sign is not None.
+        while rclpy.ok() and self.detected_sign is None:
+            rclpy.spin_once(self, timeout_sec=0.1)
 
         self.accept_sign = False
         return self.detected_sign
@@ -79,6 +88,21 @@ class TrafficSignNavigation(Node):
         sign = self.wait_for_sign()
 
         # TODO 4: Implement left, right, stop and unknown-sign behaviour.
+        if sign == 'left':
+            self.go_to(self.left_waypoint, 'left waypoint')
+            self.go_to(self.final_pose, 'final pose')
+
+        elif sign == 'right':
+            self.go_to(self.right_waypoint, 'right waypoint')
+            self.go_to(self.final_pose, 'final pose')
+
+        elif sign == 'stop':
+            self.get_logger().info(f'Stopping for {self.stop_duration} seconds...')
+            time.sleep(self.stop_duration)
+            self.go_to(self.final_pose, 'final pose')
+
+        else:
+            self.get_logger().warn(f'Unknown sign "{sign}". Staying at inspection pose.')
 
 
 def main(args=None):
