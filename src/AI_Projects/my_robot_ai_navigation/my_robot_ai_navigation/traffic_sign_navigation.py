@@ -117,4 +117,4 @@ def main(args=None):
 
 
 if __name__ == '__main__':
-    main()
+    main()# Updated by Paula - Part 2 finished
