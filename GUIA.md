@@ -5,7 +5,7 @@
 **1. Actualizar repositorio:**
 
 ```bash
-cd ~/my_rUBot_mecanum
+cd ~/Desktop/my_rUBot_mecanum
 git pull
 ```
 
