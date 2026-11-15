@@ -108,33 +108,17 @@ En RViz, si no está bien localizado: **2D Pose Estimate**. Luego **Nav2 Goal** 
 
 **Obstáculos:** Nav2 usa el LiDAR para esquivarlos. Mientras avanza, pon una caja delante: debe replanificar.
 
-### 2.C Waypoints programados
+### 2.C Waypoints (ya definidos en el código)
 
-Edita `src/Navigation_Projects/my_robot_nav_control/config/waypoints_hw.yaml` con **tus** coordenadas:
+No hay que editar nada: las coordenadas ya están en `waypoints_hw.yaml`. Con Nav2 activo:
 
-```yaml
-initial_pose: [0.0, 0.0, 0.0]     # donde está el robot (mapa)
-waypoints:
-  - [X1, Y1, YAW1]
-final_pose: [XF, YF, YAWF]
-```
-
-Reglas:
-- `[x, y, yaw]` en frame `map`; metros y **radianes** (1.57 ≈ 90°).
-- Los valores de ejemplo de los documentos son de simulación: **no los copies**. Saca coordenadas con la herramienta **Publish Point** de RViz + `ros2 topic echo /clicked_point` sobre zonas libres (blancas), lejos de paredes.
-- ⚠️ Primero 1 waypoint cercano (≤1 m), luego la ruta completa.
-- Recompila tras editar:
-
-```bash
-colcon build --symlink-install --packages-select my_robot_nav_control
-source install/setup.bash
-```
-
-**Terminal 2** (con Nav2 activo):
+**Terminal 2:**
 
 ```bash
 ros2 launch my_robot_nav_control nav_waypoints.launch.py wp_file:=waypoints_hw.yaml
 ```
+
+> Las coordenadas están en el frame del mapa. Coloca el robot en el **mismo punto de origen** con el que se hizo el mapa (el de la plantilla del profe); si generas un mapa propio desde otro punto, los waypoints no coincidirán. En ese caso usa `map_file:=my_lab_map.yaml` en 2.B.
 
 Parar: `Ctrl+C` en ambos terminales.
 
@@ -142,40 +126,23 @@ Parar: `Ctrl+C` en ambos terminales.
 
 ## PARTE 3: Reconocer señales y hacerles caso
 
-### 3.0 Preparación (una vez)
+### 3.0 Preparación
+
+No hay que instalar nada nuevo. Solo, si los paquetes no estaban ya compilados (como en la guía 05b):
 
 ```bash
-python3 -m venv --system-site-packages .venv-yolo
-source .venv-yolo/bin/activate
-python -m pip install --upgrade pip
-python -m pip install ultralytics "numpy<2.0"
-
+cd ~/Desktop/my_rUBot_mecanum
 source /opt/ros/humble/setup.bash
+source .venv-yolo/bin/activate
 colcon build --symlink-install --packages-select my_robot_ai_perception my_robot_ai_navigation
 source install/setup.bash
 ```
 
-### 3.1 Configurar rutas
-
-Edita `src/AI_Projects/my_robot_ai_navigation/config/traffic_sign_navigation_real.yaml` con tus coordenadas (mismo mapa que la parte 2):
-
-```yaml
-traffic_sign_navigation:
-  ros__parameters:
-    use_sim_time: false            # obligatorio en real
-    initial_pose: [X0, Y0, YAW0]   # donde colocas el robot
-    inspection_pose: [XI, YI, YAWI]  # mirando a la señal
-    left_waypoint: [XL, YL, YAWL]
-    right_waypoint: [XR, YR, YAWR]
-    final_pose: [XF, YF, YAWF]
-    stop_duration: 3.0
-```
-
-La `inspection_pose` debe **mirar a la señal** y los waypoints deben estar en zonas libres. Recompila tras editar (`colcon build --symlink-install --packages-select my_robot_ai_navigation` + `source install/setup.bash`).
+Las rutas (`traffic_sign_navigation_real.yaml`) ya están definidas en el código; no hay que editarlas. Coloca el robot en su pose inicial, quieto.
 
 ### 3.2 Ejecución
 
-Robot en `initial_pose`, quieto. **4 terminales** (en el 2, con el venv activado):
+**4 terminales** (en el 2, con el venv activado):
 
 **Terminal 1: Nav2**
 
