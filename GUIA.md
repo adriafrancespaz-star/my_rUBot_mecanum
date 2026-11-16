@@ -107,7 +107,7 @@ ros2 topic pub --once /reset_odom std_msgs/msg/Bool "{data: true}"
 Lanzar Nav2:
 
 ```bash
-ros2 launch my_robot_navigation2 navigation2_robot.launch.py use_sim_time:=false map_file:=groupB3_map.yaml params_file:=rubot_real_lidar_nav.yaml
+ros2 launch my_robot_navigation2 navigation2_robot.launch.py use_sim_time:=false map_file:=mapB3_lab.yaml params_file:=rubot_real_lidar_nav.yaml
 ```
 
 **En RViz: (OPCIONAL)**
@@ -138,7 +138,7 @@ ros2 topic pub --once /reset_odom std_msgs/msg/Bool "{data: true}"
 ```bash
 ros2 launch my_robot_navigation2 navigation2_robot.launch.py \
   use_sim_time:=false \
-  map_file:=groupB3_map.yaml \
+  map_file:=mapB3_lab.yaml \
   params_file:=rubot_real_lidar_nav.yaml
 ```
 
