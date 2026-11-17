@@ -364,7 +364,7 @@ class HolonomicObstacleWallFollower(Node):
 
         # Diagonal motion: forward and towards the right wall.
         cmd.linear.x = self.forward_speed*0.3
-        cmd.linear.y = -self.diagonal_factor 
+        cmd.linear.y = -self.diagonal_factor * self.lateral_speed
 
     def scan_callback(self, scan):
         """Read the LiDAR and calculate the next velocity command."""
